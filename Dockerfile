@@ -13,7 +13,7 @@ RUN apt-get install -y \
   libc-client-dev \
   libkrb5-dev \
   build-essential \
-  firebird2.5-dev \
+  firebird-dev \
   libicu-dev \
   libldb-dev \
   libldap2-dev \
@@ -57,7 +57,6 @@ RUN docker-php-ext-install -j$(nproc) intl
 RUN docker-php-ext-install -j$(nproc) json
 RUN docker-php-ext-install -j$(nproc) ldap
 RUN docker-php-ext-install -j$(nproc) mbstring
-RUN docker-php-ext-install -j$(nproc) mcrypt
 RUN docker-php-ext-install -j$(nproc) mysqli
 RUN docker-php-ext-install -j$(nproc) opcache
 RUN docker-php-ext-install -j$(nproc) pdo
@@ -65,7 +64,6 @@ RUN docker-php-ext-install -j$(nproc) pdo_firebird
 RUN docker-php-ext-install -j$(nproc) pdo_mysql
 RUN docker-php-ext-install -j$(nproc) pdo_pgsql
 RUN docker-php-ext-install -j$(nproc) pdo_sqlite
-# RUN docker-php-ext-install -j$(nproc) phar
 RUN docker-php-ext-install -j$(nproc) posix
 RUN docker-php-ext-install -j$(nproc) readline
 RUN docker-php-ext-install -j$(nproc) shmop
@@ -78,7 +76,7 @@ RUN docker-php-ext-install -j$(nproc) xml
 RUN docker-php-ext-install -j$(nproc) xsl
 RUN docker-php-ext-install -j$(nproc) zip
 
-RUN printf "\n" | pecl install imagick-beta xdebug mongodb
+RUN printf "\n" | pecl install imagick-beta xdebug-2.6.0beta1 mongodb
 
 RUN docker-php-ext-enable imagick xdebug mongodb
 
@@ -105,6 +103,8 @@ ENV PATH="/root/.composer/vendor/bin:${PATH}"
 RUN adduser --disabled-password --gecos "" damabox && adduser damabox sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Install Yarn
+RUN apt-get install -y gnupg gnupg1 gnupg2
+
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
 RUN apt-get update && apt-get install -y yarn
